@@ -1,9 +1,24 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import mongoose from 'mongoose'
 
 const app = express()
 
 const PORT = 3000
+
+const database = 'mongodb+srv://Peem:0858@tnbootcampexpressactivi.vwfz1c6.mongodb.net/school?retryWrites=true&w=majority'
+
+mongoose.Promise = global.Promise
+mongoose.connect(database, { useNewUrlParser: true }).then(
+  () => {
+    console.log('[success] : connected to the database ')
+  },
+  (error) => {
+    console.log(`[failed] : ${error}`)
+    process.exit()
+  },
+)
+
 
 app.use(bodyParser.json({ type: 'application/json' }))
 app.use(bodyParser.urlencoded({ extended: true }))
