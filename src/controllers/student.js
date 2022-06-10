@@ -3,16 +3,18 @@ import {
   NOT_FOUND_DATA, ERROR_CREATION, ERROR_DELETED, ERROR_UPDATED,
 } from '../constants/errors/unsuccess'
 import {
-  SUCCESS_CREATED,
+  SUCCESS_CREATED, SUCCESS_UPDATED, SUCCESS_DELETED,
 } from '../constants/success'
 
 const getAllStudents = async (req, res) => {
   const result = await studentModel.find()
+  setTimeout(() => {
+    res.status(200).json(result)
+  }, 2000)
   if (!result) {
     throw NOT_FOUND_DATA
     // res.status(500).json({ Status: 'fail', Message: 'Sorry, there is not a single student.' })
   }
-  res.status(200).json(result)
 }
 
 const getStudentById = async (req, res) => {
@@ -54,7 +56,7 @@ const updateStudentById = async (req, res) => {
     if (!result) {
       throw NOT_FOUND_DATA
     }
-    res.status(200).json(result)
+    res.status(200).json(SUCCESS_UPDATED)
   } catch (err) {
     throw ERROR_UPDATED
   }
@@ -64,7 +66,11 @@ const deleteStudentById = async (req, res) => {
   const { ID } = req.params
   try {
     const result = await studentModel.deleteOne({ id: ID })
-    res.status(200).json(result)
+    console.log(result)
+    if (result.deletedCount === 0) {
+      res.status(404).json({ httpCode: '404', message: 'found 0 student matched with the provided ID' })
+    }
+    res.status(200).json(SUCCESS_DELETED)
   } catch (error) {
     throw ERROR_DELETED
   }
