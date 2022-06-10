@@ -13,8 +13,7 @@ const getAllStudents = async (req, res) => {
       res.status(200).json(result)
     }, 2000)
     if (!result) {
-      throw NOT_FOUND_DATA
-    // res.status(500).json({ Status: 'fail', Message: 'Sorry, there is not a single student.' })
+      res.status(404).json({ httpCode: '404', Message: 'Sorry, there is not a single student.' })
     }
   } catch (err) {
     throw NOT_FOUND_DATA
@@ -26,8 +25,7 @@ const getStudentById = async (req, res) => {
   try {
     const result = await studentModel.findOne({ id: ID })
     if (!result) {
-      throw NOT_FOUND_DATA
-    // res.status(500).json({ Status: 'fail', Message: 'Sorry, there is not student you were looking for.' })
+      res.status(404).json({ httpCode: '404', Message: 'Sorry, there is not student you were looking for.' })
     }
     res.status(200).json(result)
   } catch (err) {
